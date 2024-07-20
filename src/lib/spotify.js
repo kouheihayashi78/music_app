@@ -1,14 +1,31 @@
 import axios from "axios";
-export const getToken = async() => {
+
+class SpotifyClient {
+  static async initialize() {
     // 第一引数URL、第二引数body、第三引数header
-    const res = await axios.post("https://accounts.spotify.com/api/token", {
-        grant_type: 'client_credentials',
+    const res = await axios.post(
+      "https://accounts.spotify.com/api/token",
+      {
+        grant_type: "client_credentials",
         client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
         client_secret: process.env.REACT_APP_SPOTIFY_CLIENT_SECRET,
-    },{
+      },
+      {
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded" 
-        }
-    })
-    console.log(res)
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    let spotify = new SpotifyClient();
+    spotify.token = res.data.access_token;
+    return spotify;
+  }
+
+  test() {
+    console.log(this.token);
+  }
 }
+
+const spotify = await SpotifyClient.initialize();
+export default spotify;
