@@ -1,3 +1,4 @@
+import { SongList } from "./components/SongList.js";
 import spotify from "./lib/spotify.js"
 export default function App() {
   spotify.test();
@@ -9,6 +10,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
+          <SongList />
         </section>
       </main>
     </div>
