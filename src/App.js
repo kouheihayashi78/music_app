@@ -25,10 +25,15 @@ export default function App() {
 
   // 曲をクリックして選択した時に走る処理
   const handleSongSelected = (song) => {
-    setSelectedSong(song);
-    audioRef.current.src = song.preview_url;
-    audioRef.current.play();
-    setIsPlay(true)
+    if(isPlay){
+      audioRef.current.pause();
+      setIsPlay(false)
+    } else {
+      setSelectedSong(song);
+      audioRef.current.src = song.preview_url;
+      audioRef.current.play();
+      setIsPlay(true)
+    }
   }
   
   return (
