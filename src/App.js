@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SongList } from "./components/SongList.js";
 import spotify from "./lib/spotify.js"
 export default function App() {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ popularSongs, setPopularSongs ] = useState([]);
+  const [ isPlay, setIsPlay ] = useState(false);
+  const [ selectedSong, setSelectedSong ] = useState();
+  const audioRef = useRef(null);
 
   useEffect(() => {
     fetchPopularSongs()
@@ -19,6 +22,14 @@ export default function App() {
     setPopularSongs(popularSongs);
     setIsLoading(false); // loading解除
   }
+
+  // 曲をクリックして選択した時に走る処理
+  const handleSongSelected = (song) => {
+    setSelectedSong(song);
+    audioRef.current.src = song.preview_url;
+    audioRef.current.play();
+    setIsPlay(true)
+  }
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
@@ -28,9 +39,10 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList isLoading={isLoading} popularSongs={popularSongs} />
+          <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
         </section>
       </main>
+      <audio ref={audioRef} />
     </div>
   );
 }

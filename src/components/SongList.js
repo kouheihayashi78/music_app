@@ -1,7 +1,7 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export function SongList({ isLoading, popularSongs }) {
+export function SongList({ isLoading, popularSongs, handleSongSelected }) {
   if (isLoading)
     return (
       <div className="inset-0 flex justify-center items-center">
@@ -14,7 +14,7 @@ export function SongList({ isLoading, popularSongs }) {
       {popularSongs
         .map((song) => {
           return (
-            <div key={song.id} className="flex-none cursor-pointer ">
+            <div onClick={() => handleSongSelected(song)} key={song.id} className="flex-none cursor-pointer ">
               <img
                 alt="thumbnail"
                 src={song.album.images[0].url}
