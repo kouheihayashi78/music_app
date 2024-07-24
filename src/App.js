@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SongList } from "./components/SongList.js";
 import spotify from "./lib/spotify.js"
+import { Player } from "./components/Player.js";
 export default function App() {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ popularSongs, setPopularSongs ] = useState([]);
@@ -47,6 +48,7 @@ export default function App() {
           <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
         </section>
       </main>
+      {selectedSong != null && <Player song={selectedSong} />}
       <audio ref={audioRef} />
     </div>
   );
