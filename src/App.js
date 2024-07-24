@@ -26,14 +26,29 @@ export default function App() {
 
   // 曲をクリックして選択した時に走る処理
   const handleSongSelected = (song) => {
-    if(isPlay){
-      audioRef.current.pause();
-      setIsPlay(false)
-    } else {
       setSelectedSong(song);
       audioRef.current.src = song.preview_url;
-      audioRef.current.play();
-      setIsPlay(true)
+      playSong();
+  }
+
+  // 曲を再生する処理
+  const playSong = () => {
+    audioRef.current.play();
+    setIsPlay(true)
+  }
+
+  // 曲を停止する処理
+  const pauseSong = () => {
+    audioRef.current.pause();
+    setIsPlay(false)
+  }
+
+  // 再生バーをクリックすると走る処理
+  const toggleSong = () => {
+    if(isPlay){
+      pauseSong();
+    } else {
+      playSong();
     }
   }
   
@@ -48,7 +63,7 @@ export default function App() {
           <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
         </section>
       </main>
-      {selectedSong != null && <Player song={selectedSong} isPlay={isPlay} handleSongSelected={handleSongSelected} />}
+      {selectedSong != null && <Player song={selectedSong} isPlay={isPlay} toggleSong={toggleSong} />}
       <audio ref={audioRef} />
     </div>
   );
