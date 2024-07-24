@@ -27,8 +27,14 @@ export default function App() {
   // 曲をクリックして選択した時に走る処理
   const handleSongSelected = (song) => {
       setSelectedSong(song);
-      audioRef.current.src = song.preview_url;
-      playSong();
+      // 曲が存在する場合にaudioRefにpreview_urlをセットし、曲を再生する
+      if(song.preview_url != null) {
+        audioRef.current.src = song.preview_url;
+        playSong();
+      // 曲が存在しない場合、曲を停止する
+      } else {
+        pauseSong();
+      }
   }
 
   // 曲を再生する処理

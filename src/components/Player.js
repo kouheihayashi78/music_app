@@ -20,7 +20,10 @@ export function Player({ song, isPlay, toggleSong }) {
           <FontAwesomeIcon
             onClick={toggleSong}
             icon={isPlay ? faStopCircle : faPlayCircle}
-            className="text-white text-3xl mx-2 h-[40px] w-[40px] cursor-pointer"
+            className={`text-white text-3xl mx-2 h-[40px] w-[40px] ${song.preview_url != null 
+              ? 'cursor-pointer' 
+              : 'opacity-20 pointer-events-none' // 曲が存在しない場合の処理
+            } `}
           />
         </div>
       </div>
