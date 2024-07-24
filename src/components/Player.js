@@ -1,7 +1,7 @@
-import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlayCircle, faStopCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export function Player({ song }) {
+export function Player({ song, isPlay, handleSongSelected }) {
   return (
     <footer className="fixed bottom-0 w-full bg-gray-800 p-5">
       <div className="grid grid-cols-3">
@@ -18,7 +18,8 @@ export function Player({ song }) {
         </div>
         <div className="flex items-center justify-center">
           <FontAwesomeIcon
-            icon={faPlayCircle}
+            onClick={handleSongSelected}
+            icon={isPlay ? faStopCircle : faPlayCircle}
             className="text-white text-3xl mx-2 h-[40px] w-[40px] cursor-pointer"
           />
         </div>

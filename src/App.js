@@ -48,7 +48,7 @@ export default function App() {
           <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
         </section>
       </main>
-      {selectedSong != null && <Player song={selectedSong} />}
+      {selectedSong != null && <Player song={selectedSong} isPlay={isPlay} handleSongSelected={handleSongSelected} />}
       <audio ref={audioRef} />
     </div>
   );
