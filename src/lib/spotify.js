@@ -1,4 +1,6 @@
 import axios from "axios";
+// ドキュメントは以下
+// https://developer.spotify.com/documentation/web-api
 
 class SpotifyClient {
   static async initialize() {
@@ -29,6 +31,20 @@ class SpotifyClient {
       }
     })
     return res.data;
+  }
+
+  // 検索処理
+  async searchSongs (keyword) {
+    const res = await axios.get('https://api.spotify.com/v1/search', {
+      headers: {
+        Authorization: 'Bearer ' + this.token
+      },
+      params: {
+        q: keyword,
+        type: "track" // 検索結果を曲だけに絞る
+      }
+    })
+    return res.data.tracks;
   }
 }
 
