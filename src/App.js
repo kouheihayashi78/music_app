@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SongList } from "./components/SongList.js";
 import spotify from "./lib/spotify.js"
 import { Player } from "./components/Player.js";
+import { SearchInput } from "./components/SearchInput.js";
 export default function App() {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ popularSongs, setPopularSongs ] = useState([]);
@@ -64,6 +65,7 @@ export default function App() {
         <header className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold">Music App</h1>
         </header>
+        <SearchInput />
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
           <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
