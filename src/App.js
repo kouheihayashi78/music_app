@@ -8,6 +8,8 @@ export default function App() {
   const [ popularSongs, setPopularSongs ] = useState([]);
   const [ isPlay, setIsPlay ] = useState(false);
   const [ selectedSong, setSelectedSong ] = useState();
+  const [ keyword, setKeyword ] = useState('');
+  const [ searchedSongs, setSearchedSongs ] = useState();
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -58,6 +60,31 @@ export default function App() {
       playSong();
     }
   }
+
+  // 検索バーの文字をセットする関数
+  const handleInputChange = (e) => {
+    setKeyword(e.target.value);
+  }
+
+  // 検索をするAPIを呼び出し、結果を格納する
+  const searchSongs = async() => {
+    setIsLoading(true);
+
+    // 空文字、スペースのみの場合は検索しないようにする
+    if(keyword && keyword.match(/\S/g)) {
+      const result = await spotify.searchSongs(keyword);
+      setSearchedSongs(result.items);
+    } else {
+      setSearchedSongs();
+    }
+    setIsLoading(false);
+  }
+
+  // エンターキーを押して検索結果表示
+  const handleKeyDown = (e) => {
+    if (e.nativeEvent.isComposing || e.key !== 'Enter') return
+    searchSongs();
+  }
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
@@ -65,10 +92,14 @@ export default function App() {
         <header className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold">Music App</h1>
         </header>
-        <SearchInput />
+        <SearchInput handleInputChange={handleInputChange} searchSongs={searchSongs} handleKeyDown={handleKeyDown} />
         <section>
-          <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList isLoading={isLoading} popularSongs={popularSongs} handleSongSelected={handleSongSelected} />
+          <h2 className="text-2xl font-semibold mb-5">{searchedSongs != null ? 'Search Songs' : 'Popular Songs'}</h2>
+          <SongList 
+            isLoading={isLoading} 
+            songs={searchedSongs != null ? searchedSongs : popularSongs} 
+            handleSongSelected={handleSongSelected} 
+          />
         </section>
       </main>
       {selectedSong != null && <Player song={selectedSong} isPlay={isPlay} toggleSong={toggleSong} />}
