@@ -34,14 +34,16 @@ class SpotifyClient {
   }
 
   // 検索処理
-  async searchSongs (keyword) {
+  async searchSongs (keyword, limit, offset) {
     const res = await axios.get('https://api.spotify.com/v1/search', {
       headers: {
         Authorization: 'Bearer ' + this.token
       },
       params: {
         q: keyword,
-        type: "track" // 検索結果を曲だけに絞る
+        type: "track", // 検索結果を曲だけに絞る
+        limit,
+        offset
       }
     })
     return res.data.tracks;

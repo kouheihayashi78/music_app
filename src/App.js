@@ -3,6 +3,10 @@ import { SongList } from "./components/SongList.js";
 import spotify from "./lib/spotify.js"
 import { Player } from "./components/Player.js";
 import { SearchInput } from "./components/SearchInput.js";
+import { Pagination } from "./components/Pagination.js";
+
+const limit = 20;
+
 export default function App() {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ popularSongs, setPopularSongs ] = useState([]);
@@ -10,6 +14,7 @@ export default function App() {
   const [ selectedSong, setSelectedSong ] = useState();
   const [ keyword, setKeyword ] = useState('');
   const [ searchedSongs, setSearchedSongs ] = useState();
+  const [ page, setPage ] = useState(1);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -67,17 +72,32 @@ export default function App() {
   }
 
   // 検索をするAPIを呼び出し、結果を格納する
-  const searchSongs = async() => {
+  const searchSongs = async( page ) => {
     setIsLoading(true);
+    // 数字にできないなどの無効な値がある場合は0で、それ以外はページ数を計算する
+    // 例：2ページ目なら20が格納され21以降のデータが格納される
+    const offset = parseInt(page) ? (parseInt(page) - 1) * limit : 0;
 
     // 空文字、スペースのみの場合は検索しないようにする
     if(keyword && keyword.match(/\S/g)) {
-      const result = await spotify.searchSongs(keyword);
+      const result = await spotify.searchSongs(keyword, limit, offset);
       setSearchedSongs(result.items);
     } else {
       setSearchedSongs();
     }
     setIsLoading(false);
+  }
+
+  const moveToNext = async () => {
+    const nextPage = page + 1;
+    await searchSongs(nextPage);
+    setPage(nextPage);
+  }
+
+  const moveToPrev = async () => {
+    const prevPage = page - 1;
+    await searchSongs(prevPage);
+    setPage(prevPage);
   }
 
   // エンターキーを押して検索結果表示
@@ -100,6 +120,7 @@ export default function App() {
             songs={searchedSongs != null ? searchedSongs : popularSongs} 
             handleSongSelected={handleSongSelected} 
           />
+          {searchedSongs && <Pagination moveToNext={moveToNext} moveToPrev={moveToPrev}/>}
         </section>
       </main>
       {selectedSong != null && <Player song={selectedSong} isPlay={isPlay} toggleSong={toggleSong} />}
